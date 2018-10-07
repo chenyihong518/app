@@ -3,7 +3,6 @@
     <top :name="name" :isBack="0"></top>
     <div class="content">
       <router-view></router-view>
-      <div class="slider"></div>
     </div>
     <bottom :name="name" v-on:changeTitle="changeTitle($event)"></bottom>
   </div>
