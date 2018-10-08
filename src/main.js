@@ -3,12 +3,15 @@
 import Vue from 'vue'
 import App from './App'
 import VueRouter from 'vue-router'
+import AlloyFinger from 'alloyfinger'
+import AlloyFingerVue from 'alloyfinger/vue/alloy_finger.vue'
 import home from './components/home/home'
 import mine from './components/mine/mine'
 import rank from './components/rank/rank'
 import 'font-awesome/css/font-awesome.css'
 
 Vue.use(VueRouter)
+Vue.use(AlloyFingerVue,{AlloyFinger})
 Vue.config.productionTip = false
 
 const routes = [

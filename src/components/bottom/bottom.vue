@@ -46,6 +46,7 @@
     display: flex
     height: 50px
     line-height: 50px
+    background: #fff
     box-shadow: 0 0 1px rgba(0, 0, 0, .85)
     bottom: 0
     .tab-item
