@@ -2,7 +2,7 @@
   <div>
     <div class="slider" v-on:mouseover="stop()" v-on:mouseout="move()">
       <div class="slider-item">
-        <transition-group tag="ul" name="image" v-finger:swipe="swipe">
+        <transition-group tag="ul" :name="swipeAction" v-finger:swipe="swipe">
           <li v-for="(img,index) in imgArray" v-show="index===mark" :key="index">
             <a href="#">
               <img :src="img" width="100%" height="211"/>
@@ -117,16 +117,14 @@
       width: 100%
       li
         position: absolute
-        &.image-enter-active
+        &.swipe-left-enter-active,&.swipe-left-leave-active,&.swipe-right-enter-active,&.swipe-right-leave-active
+          transition:all 1.5s ease
+        &.swipe-left-enter-active,&.swipe-left-leave,&.swipe-right-leave,&.swipe-right-enter-active
           transform: translateX(0)
-          transition: all 1.5s ease
-        &.image-leave-active
+        &.swipe-left-leave-active,&.swipe-right-enter
           transform: translateX(-100%)
-          transition: all 1.5s ease
-        &.image-enter
+        &.swipe-left-enter,&.swipe-right-leave-active
           transform: translateX(100%)
-        &.image-leave
-          transform: translateX(0)
     .slider-bar
       position: absolute
       bottom: 10px
