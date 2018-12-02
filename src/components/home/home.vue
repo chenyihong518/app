@@ -1,19 +1,14 @@
 <template>
   <div>
-    <div class="slider" v-on:mouseover="stop()" v-on:mouseout="move()">
-      <div class="slider-item">
-        <transition-group tag="ul" :name="swipeAction" v-finger:swipe="swipe">
-          <li v-for="(img,index) in imgArray" v-show="index===mark" :key="index">
-            <a href="#">
-              <img :src="img" width="100%" height="211"/>
-            </a>
-          </li>
-        </transition-group>
-      </div>
-      <div class="slider-bar">
-        <span v-for="(item,index) in imgArray" :class="{'active':index===mark}" @click="change(index)"
-              :key="index"></span>
-      </div>
+    <div class="slider">
+      <swiper :options="swiperOption" ref="mySwiper">
+        <!-- 这部分放你要渲染的那些内容 -->
+        <swiper-slide><img src="./1.jpg" width="100%" height="211"></swiper-slide>
+        <swiper-slide><img src="./2.jpg" width="100%" height="211"></swiper-slide>
+        <swiper-slide><img src="./3.jpg" width="100%" height="211"></swiper-slide>
+        <!-- 这是轮播的小圆点 -->
+        <div class="swiper-pagination" slot="pagination"></div>
+      </swiper>
     </div>
     <div class="search">
       <input class="search-box" type="search" placeholder="找餐厅，搜一下"/>
@@ -48,62 +43,50 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import 'swiper/dist/css/swiper.css'////这里注意具体看使用的版本是否需要引入样式，以及具体位置。
+  import {swiper, swiperSlide} from 'vue-awesome-swiper'
+
   export default {
     data() {
       return {
-        mark: 0,
-        timer: null,
-        swipeAction: 'swipe-left',
-        imgArray: [
-          require('./1.jpg'),
-          require('./2.jpg'),
-          require('./3.jpg')
-        ]
-      }
-    },
-    methods: {
-      autoPlay() {
-        this.mark++;
-        if (this.mark >= this.imgArray.length) {
-          this.mark = 0;
-        }
-      },
-      play() {
-        this.timer = setInterval(this.autoPlay, 4500);
-      },
-      change(i) {
-        this.mark = i;
-      },
-      stop() {
-        clearInterval(this.timer);
-      },
-      move() {
-        this.timer = setInterval(this.autoPlay, 4500);
-      },
-      next() {
-        this.mark++;
-        if (this.mark >= this.imgArray.length) {
-          this.mark = 0;
-        }
-      },
-      prev() {
-        this.mark--;
-        if (this.mark < 0) {
-          this.mark = this.imgArray.length - 1;
-        }
-      },
-      swipe(evt) {
-        if (evt.direction == "Left") {
-          this.next();
-          this.swipeAction = "swipe-left";
-        } else {
-          this.prev();
-          this.swipeAction = "swipe-right";
+        swiperOption: {
+          //notNextTick: true,
+          //循环
+          loop:true,
+          //设定初始化时slide的索引
+          initialSlide:0,
+          //自动播放
+          autoplay: {
+            disableOnInteraction: false,
+          },//用户操作swipe后是否禁止autoplay，false为不禁止
+          speed:800,
+          direction: 'horizontal',
+          on: {//滑动之后的回调函数
+            slideChangeTransitionEnd: function(){
+              // console.log(this.activeIndex);//切换结束时，告诉我现在是第几个slide
+            }
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            clickable :true
+          },
+          swiperSlides: [1, 2, 3, 4]
         }
       }
     },
-    created() {
-      this.play();
+    components: {
+      swiper,
+      swiperSlide
+    },
+    computed: {
+      swiper() {
+        return this.$refs.mySwiper.swiper;
+      }
+    },
+    mounted () {
+      //可以使用swiper这个对象去使用swiper官网中的那些方法
+      console.log('this is current swiper instance object', this.swiper);
+      // this.swiper.slideTo(0, 0, false);
     }
   }
 </script>
@@ -113,31 +96,6 @@
     position: relative
     height: 211px
     overflow: hidden
-    .slider-item
-      width: 100%
-      li
-        position: absolute
-        &.swipe-left-enter-active,&.swipe-left-leave-active,&.swipe-right-enter-active,&.swipe-right-leave-active
-          transition:all 1.5s ease
-        &.swipe-left-enter-active,&.swipe-left-leave,&.swipe-right-leave,&.swipe-right-enter-active
-          transform: translateX(0)
-        &.swipe-left-leave-active,&.swipe-right-enter
-          transform: translateX(-100%)
-        &.swipe-left-enter,&.swipe-right-leave-active
-          transform: translateX(100%)
-    .slider-bar
-      position: absolute
-      bottom: 10px
-      right: 10px
-      span
-        width: 20px
-        height: 5px
-        border: 1px solid
-        background: #fff
-        display: inline-block
-        margin-right: 10px
-        &.active
-          background: #ccc
 
   .search
     background: #efeff4
