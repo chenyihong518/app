@@ -29,6 +29,18 @@
       }
     }
   }
+
+  //ios10之后禁止页面缩放
+  window.onload = function() {
+    document.addEventListener('touchstart', function(event) {
+      if (event.touches.length > 1) {
+        event.preventDefault()
+      }
+    })
+    document.addEventListener('gesturestart', function(event) {
+      event.preventDefault()
+    })
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
