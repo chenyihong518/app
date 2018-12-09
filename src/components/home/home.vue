@@ -39,12 +39,29 @@
         </router-link>
       </div>
     </div>
+    <div class="featured">
+      <div class="featured-title">
+        <p>精选商家</p>
+      </div>
+      <div class="featured-content">
+        <div class="featured-content-item">
+          <img src="./1.jpg" width="100%"/>
+        </div>
+        <div class="featured-content-item">
+          <img src="./2.jpg" width="100%"/>
+        </div>
+        <div class="featured-content-item">
+          <img src="./3.jpg" width="100%"/>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import 'swiper/dist/css/swiper.css'////这里注意具体看使用的版本是否需要引入样式，以及具体位置。
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
+  import axios from "axios"
 
   export default {
     data() {
@@ -52,23 +69,23 @@
         swiperOption: {
           //notNextTick: true,
           //循环
-          loop:true,
+          loop: true,
           //设定初始化时slide的索引
-          initialSlide:0,
+          initialSlide: 0,
           //自动播放
           autoplay: {
             disableOnInteraction: false,
           },//用户操作swipe后是否禁止autoplay，false为不禁止
-          speed:800,
+          speed: 800,
           direction: 'horizontal',
           on: {//滑动之后的回调函数
-            slideChangeTransitionEnd: function(){
-              // console.log(this.activeIndex);//切换结束时，告诉我现在是第几个slide
+            slideChangeTransitionEnd: function () {
+              //console.log(this.activeIndex);//切换结束时，告诉我现在是第几个slide
             }
           },
           pagination: {
             el: '.swiper-pagination',
-            clickable :true
+            clickable: true
           },
           swiperSlides: [1, 2, 3, 4]
         }
@@ -83,10 +100,17 @@
         return this.$refs.mySwiper.swiper;
       }
     },
-    mounted () {
+    mounted() {
       //可以使用swiper这个对象去使用swiper官网中的那些方法
       console.log('this is current swiper instance object', this.swiper);
       // this.swiper.slideTo(0, 0, false);
+    },
+    created(){
+      axios.get('http://localhost:8080/restaurant/shop/list').then(function(res){
+        console.log(res);
+      }).catch(function (err) {
+        console.log(err);
+      })
     }
   }
 </script>
@@ -124,4 +148,13 @@
         color: #000
         text-align: center
         margin-top: 5px
+
+  .featured
+    background: #fff
+    .featured-title
+      height: 21px
+      padding: 10px 0
+      font-size: 14px
+      text-align: center
+
 </style>
